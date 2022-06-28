@@ -1,6 +1,7 @@
 package data;
 
 import lombok.Value;
+import page.DashboardPage;
 
 public class DataHelper {
 
@@ -32,7 +33,7 @@ public class DataHelper {
     }
 
     public static AuthInfo getAuthInfo() {
-        return new AuthInfo("vasya", "qwerty123" );
+        return new AuthInfo("vasya", "qwerty123");
     }
 
 
@@ -54,5 +55,35 @@ public class DataHelper {
 
     public static VerificationCode getVerificationCode(AuthInfo authInfo) { // в скобках аутинфо
         return new VerificationCode("12345");
+    }
+
+    @Value
+    public static class CardInfo {
+        private String cardNumber;
+    }
+
+
+    public static CardInfo getSecondCard() {
+        return new CardInfo("5559000000000002");
+    }
+
+    public static CardInfo getFirstCard() {
+        return new CardInfo("5559000000000001");
+    }
+
+    public static int randomTransactionFromFirstCard() {
+        var page = new DashboardPage();
+        int minBalance = 0;
+        int nowBalance = page.getCardBalance(getFirstCard());
+        int sumDeposit = minBalance + (int) (Math.random() * ((nowBalance - minBalance) + 1));
+        return sumDeposit;
+    }
+
+    public static int randomTransactionFromSecondCard() {
+        var page = new DashboardPage();
+        int minBalance = 0;
+        int nowBalance = page.getCardBalance(getSecondCard());
+        int sumDeposit = minBalance + (int) (Math.random() * ((nowBalance - minBalance) + 1));
+        return sumDeposit;
     }
 }

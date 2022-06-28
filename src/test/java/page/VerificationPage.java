@@ -7,13 +7,13 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class VerificationPage {
 
-private SelenideElement codeField = $("[data-test-id=code] input");
-private SelenideElement nextButton = $("[data-test-id=action-verify]");
+    private SelenideElement codeField = $("[data-test-id=code] input");
+    private SelenideElement nextButton = $("[data-test-id=action-verify]");
 
-public DashboardPage validCode (DataHelper.VerificationCode verificationCode) { //TODO спросить почему DashboardPage
-    codeField.setValue(verificationCode.getCode());
-    nextButton.click();
+    public DashboardPage validCode(DataHelper.VerificationCode verificationCode) {
+        codeField.setValue(verificationCode.getCode());
+        nextButton.click();
         return new DashboardPage();
-}
+    }
 
 }

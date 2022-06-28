@@ -6,9 +6,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import page.DashboardPage;
 import page.LoginPage;
+import page.TransactionPage;
 
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MoneyTransferTest {
 
@@ -30,34 +32,97 @@ public class MoneyTransferTest {
         dashboardPage.assertThisIsDashboardPage();
     }
 
-    public void loginToLC() {
+    @Test
+    void shouldDepositFirstCard() {
+
         var loginPage = new LoginPage();
         var authInfo = DataHelper.getAuthInfo(); // получаем данные пользователя
         var verificationPage = loginPage.validLogin(authInfo); // авторизуемся на странице
         var code = DataHelper.getVerificationCode(authInfo); // получаем из бд код
         var dashboardPage = verificationPage.validCode(code); // вставляем код на странице
         dashboardPage.assertThisIsDashboardPage();
+
+        var firstCard = DataHelper.getFirstCard();
+        var secondCard = DataHelper.getSecondCard();
+
+        var transactionSum = DataHelper.randomTransactionFromSecondCard();
+//        int amount = 200;
+
+        var expectedBalanceFirstCard = dashboardPage.getCardBalance(firstCard) + transactionSum;
+        var expectedBalanceSecondCard = dashboardPage.getCardBalance(secondCard) - transactionSum;
+
+
+        var deposit = dashboardPage.selectCardTransaction(firstCard);
+        deposit.transaction(secondCard, String.valueOf(transactionSum));
+        dashboardPage.assertThisIsDashboardPage();
+
+        var actualBalanceFirstCard = dashboardPage.getCardBalance(firstCard);
+        var actualBalanceSecondCard = dashboardPage.getCardBalance(secondCard);
+
+        assertEquals(expectedBalanceFirstCard, actualBalanceFirstCard);
+        assertEquals(expectedBalanceSecondCard, actualBalanceSecondCard);
+
     }
 
     @Test
-    void shouldTransferMoneyFrom2To1() {
-        loginToLC();
-        var dashboardPage = new DashboardPage();
-        $$("[data-test-id=action-deposit].button").get(0).click();
-        $("[data-test-id='amount'] input").val("10");
-        $("[data-test-id='from'] input").val(DashboardPage.secondCard());
-        $(withText("Пополнить")).click();
+    void shouldDepositSecondCard() {
+
+        var loginPage = new LoginPage();
+        var authInfo = DataHelper.getAuthInfo(); // получаем данные пользователя
+        var verificationPage = loginPage.validLogin(authInfo); // авторизуемся на странице
+        var code = DataHelper.getVerificationCode(authInfo); // получаем из бд код
+        var dashboardPage = verificationPage.validCode(code); // вставляем код на странице
         dashboardPage.assertThisIsDashboardPage();
+
+        var firstCard = DataHelper.getFirstCard();
+        var secondCard = DataHelper.getSecondCard();
+
+        var transactionSum = DataHelper.randomTransactionFromFirstCard();
+//        int amount = 200;
+
+        var expectedBalanceFirstCard = dashboardPage.getCardBalance(firstCard) - transactionSum;
+        var expectedBalanceSecondCard = dashboardPage.getCardBalance(secondCard) + transactionSum;
+
+        var deposit = dashboardPage.selectCardTransaction(secondCard);
+        deposit.transaction(firstCard, String.valueOf(transactionSum));
+        dashboardPage.assertThisIsDashboardPage();
+
+        var actualBalanceFirstCard = dashboardPage.getCardBalance(firstCard);
+        var actualBalanceSecondCard = dashboardPage.getCardBalance(secondCard);
+
+        assertEquals(expectedBalanceFirstCard, actualBalanceFirstCard);
+        assertEquals(expectedBalanceSecondCard, actualBalanceSecondCard);
     }
 
     @Test
-    void shouldTransferMoneyFrom1To2() {
-        loginToLC();
-        var dashboardPage = new DashboardPage();
-        $$("[data-test-id=action-deposit].button").get(1).click();
-        $("[data-test-id='amount'] input").val(String.valueOf(dashboardPage.money()));
-        $("[data-test-id='from'] input").val(DashboardPage.firstCard());
-        $(withText("Пополнить")).click();
+    void shouldDepositOverLimit() {
+
+        var loginPage = new LoginPage();
+        var authInfo = DataHelper.getAuthInfo(); // получаем данные пользователя
+        var verificationPage = loginPage.validLogin(authInfo); // авторизуемся на странице
+        var code = DataHelper.getVerificationCode(authInfo); // получаем из бд код
+        var dashboardPage = verificationPage.validCode(code); // вставляем код на странице
         dashboardPage.assertThisIsDashboardPage();
+
+        var firstCard = DataHelper.getFirstCard();
+        var secondCard = DataHelper.getSecondCard();
+
+//        var transactionSum = DataHelper.randomTransactionFromSecondCard();
+        int amount = 20000;
+
+        var expectedBalanceFirstCard = dashboardPage.getCardBalance(firstCard) + amount;
+        var expectedBalanceSecondCard = dashboardPage.getCardBalance(secondCard) - amount;
+
+
+        var deposit = dashboardPage.selectCardTransaction(firstCard);
+        deposit.transaction(secondCard, String.valueOf(amount));
+        dashboardPage.assertThisIsDashboardPage();
+
+        var actualBalanceFirstCard = dashboardPage.getCardBalance(firstCard);
+        var actualBalanceSecondCard = dashboardPage.getCardBalance(secondCard);
+
+        assertEquals(expectedBalanceFirstCard, actualBalanceFirstCard);
+        assertEquals(expectedBalanceSecondCard, actualBalanceSecondCard);
+
     }
 }
