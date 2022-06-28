@@ -3,6 +3,7 @@ package test;
 import com.codeborne.selenide.Configuration;
 import data.DataHelper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import page.DashboardPage;
 import page.LoginPage;
@@ -95,6 +96,7 @@ public class MoneyTransferTest {
     }
 
     @Test
+    @Disabled
     void shouldDepositOverLimit() {
 
         var loginPage = new LoginPage();
