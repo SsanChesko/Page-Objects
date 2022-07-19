@@ -71,19 +71,19 @@ public class DataHelper {
         return new CardInfo("5559000000000001");
     }
 
-    public static int randomTransactionFromFirstCard() {
-        var page = new DashboardPage();
-        int minBalance = 0;
-        int nowBalance = page.getCardBalance(getFirstCard());
-        int sumDeposit = minBalance + (int) (Math.random() * ((nowBalance - minBalance) + 1));
-        return sumDeposit;
-    }
-
-    public static int randomTransactionFromSecondCard() {
-        var page = new DashboardPage();
-        int minBalance = 0;
-        int nowBalance = page.getCardBalance(getSecondCard());
-        int sumDeposit = minBalance + (int) (Math.random() * ((nowBalance - minBalance) + 1));
-        return sumDeposit;
-    }
+//    public static int randomTransactionFromFirstCard() {
+//        var page = new DashboardPage();
+//        int minBalance = 0;
+//        int nowBalance = page.getCardBalance(getFirstCard());
+//        int sumDeposit = minBalance + (int) (Math.random() * ((nowBalance - minBalance) + 1));
+//        return sumDeposit;
+//    }
+//
+//    public static int randomTransactionFromSecondCard() {
+//        var page = new DashboardPage();
+//        int minBalance = 0;
+//        int nowBalance = page.getCardBalance(getSecondCard());
+//        int sumDeposit = minBalance + (int) (Math.random() * ((nowBalance - minBalance) + 1));
+//        return sumDeposit;
+//    }
 }

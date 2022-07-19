@@ -46,15 +46,15 @@ public class MoneyTransferTest {
         var firstCard = DataHelper.getFirstCard();
         var secondCard = DataHelper.getSecondCard();
 
-        var transactionSum = DataHelper.randomTransactionFromSecondCard();
-//        int amount = 200;
+//        var transactionSum = DataHelper.randomTransactionFromSecondCard();
+        int amount = 199;
 
-        var expectedBalanceFirstCard = dashboardPage.getCardBalance(firstCard) + transactionSum;
-        var expectedBalanceSecondCard = dashboardPage.getCardBalance(secondCard) - transactionSum;
+        var expectedBalanceFirstCard = dashboardPage.getCardBalance(firstCard) + amount;
+        var expectedBalanceSecondCard = dashboardPage.getCardBalance(secondCard) - amount;
 
 
         var deposit = dashboardPage.selectCardTransaction(firstCard);
-        deposit.transaction(secondCard, String.valueOf(transactionSum));
+        deposit.transaction(secondCard, String.valueOf(amount));
         dashboardPage.assertThisIsDashboardPage();
 
         var actualBalanceFirstCard = dashboardPage.getCardBalance(firstCard);
@@ -78,14 +78,14 @@ public class MoneyTransferTest {
         var firstCard = DataHelper.getFirstCard();
         var secondCard = DataHelper.getSecondCard();
 
-        var transactionSum = DataHelper.randomTransactionFromFirstCard();
-//        int amount = 200;
+//        var transactionSum = DataHelper.randomTransactionFromFirstCard();
+        int amount = 201;
 
-        var expectedBalanceFirstCard = dashboardPage.getCardBalance(firstCard) - transactionSum;
-        var expectedBalanceSecondCard = dashboardPage.getCardBalance(secondCard) + transactionSum;
+        var expectedBalanceFirstCard = dashboardPage.getCardBalance(firstCard) - amount;
+        var expectedBalanceSecondCard = dashboardPage.getCardBalance(secondCard) + amount;
 
         var deposit = dashboardPage.selectCardTransaction(secondCard);
-        deposit.transaction(firstCard, String.valueOf(transactionSum));
+        deposit.transaction(firstCard, String.valueOf(amount));
         dashboardPage.assertThisIsDashboardPage();
 
         var actualBalanceFirstCard = dashboardPage.getCardBalance(firstCard);
@@ -96,7 +96,6 @@ public class MoneyTransferTest {
     }
 
     @Test
-    @Disabled
     void shouldDepositOverLimit() {
 
         var loginPage = new LoginPage();
@@ -117,7 +116,7 @@ public class MoneyTransferTest {
 
 
         var deposit = dashboardPage.selectCardTransaction(firstCard);
-        deposit.transaction(secondCard, String.valueOf(amount));
+        deposit.transactionWError(secondCard, String.valueOf(amount));
         dashboardPage.assertThisIsDashboardPage();
 
         var actualBalanceFirstCard = dashboardPage.getCardBalance(firstCard);

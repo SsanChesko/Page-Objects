@@ -1,5 +1,6 @@
 package page;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import data.DataHelper;
 
@@ -15,6 +16,14 @@ public class TransactionPage {
         sumField.setValue(sum);
         fromField.setValue(cardInfo.getCardNumber());
         buttonAdd.click();
+        return new DashboardPage();
+    }
+
+    public DashboardPage transactionWError (DataHelper.CardInfo cardInfo, String sum) {
+        sumField.setValue(sum);
+        fromField.setValue(cardInfo.getCardNumber());
+        buttonAdd.click();
+        $(".notification__content").shouldHave(Condition.text("Максимально допустимый перевод + "));
         return new DashboardPage();
     }
 }
